@@ -1,0 +1,19 @@
+{
+  "name": "ada-pubsub",
+  "version": "0.0.0",
+  "description": "Minimalistic Pubsub Library",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:adaio/pubsub.git"
+  },
+  "keywords": [
+    "pubsub",
+    "ada"
+  ],
+  "author": "Azer Koculu <azer@kodfabrik.com>",
+  "license": "BSD"
+}
