@@ -1,4 +1,5 @@
 module.exports = pubsub;
+module.exports.on = on;
 
 function pubsub(customProxy){
   var proxy = customProxy || function pubsubProxy(){
@@ -52,6 +53,8 @@ function publish(options){
   var args = Array.prototype.slice.call(arguments, 1);
 
   from.subscribers.forEach(function(cb, i){
+    if(!cb) return;
+
     try {
       cb.callback.apply(undefined, args);
     } catch(exc) {
@@ -89,4 +92,63 @@ function unsubscribe(to, callback){
   }
 
   return false;
+}
+
+function on(/* pubsubs..., callback */){
+  var callback      = arguments[arguments.length - 1],
+      subscriptions = [],
+      fired         = [],
+      timer;
+
+  function newSubscriber(pubsub){
+    return function(){
+      var args  = arguments;
+
+      fired.push({ pubsub: pubsub, params: args });
+
+      if(timer){
+        clearTimeout(timer);
+        timer = undefined;
+      }
+
+      timer = setTimeout(function(){
+        callback(fired);
+        fired = [];
+      }, 0);
+    };
+  }
+
+  function add(){
+    var i = arguments.length,
+        cb;
+
+    while( i --> 0 ){
+      cb = newSubscriber(arguments[i]);
+      arguments[i].subscribe(cb);
+
+      subscriptions.push({
+        pubsub: arguments[i],
+        callback: cb
+      });
+    }
+  }
+
+  function rm(pubsub){
+    var i = subscriptions.length,
+        removed = false;
+
+    while( i --> 0 ){
+      if(subscriptions[i] && subscriptions[i].pubsub == pubsub){
+        pubsub.unsubscribe(subscriptions[i].callback);
+        subscriptions[i] = undefined;
+      }
+    }
+  }
+
+  add.apply(undefined, Array.prototype.slice.call(arguments, 0, arguments.length - 1));
+
+  return {
+    subscribeTo: add,
+    unsubscribeTo: rm
+  };
 }

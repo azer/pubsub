@@ -70,3 +70,32 @@ it('has unsubscription', function(done){
 
   done();
 });
+
+it('can combine multiple pubsubs', function(done){
+  var a = pubsub(),
+      b = pubsub(),
+      c = pubsub(),
+      d = pubsub(),
+
+      e = pubsub.on(a, b, function(changed){
+        changed.length.should.be.equal(2);
+        changed[0].pubsub.should.be.equal(a);
+        changed[1].pubsub.should.be.equal(c);
+
+        calledOnce.should.be.true;
+        calledOnce = false;
+
+        done();
+      }),
+
+      calledOnce = true;
+
+  e.subscribeTo(c, d);
+  e.unsubscribeTo(b);
+  e.unsubscribeTo(d);
+
+  a.publish();
+  b.publish();
+  c.publish();
+
+});
