@@ -1,5 +1,5 @@
-var should = require('chai').should(),
-    pubsub  = require('./');
+var pubsub = require('./'),
+    expect = require('chai').expect;
 
 it('publishes', function(done){
 
@@ -7,21 +7,21 @@ it('publishes', function(done){
 
   var i = 0;
   foo.subscribe(function(a, b){
-    a.should.be.equal(3);
-    b.should.be.equal(4);
+    expect(a).to.equal(3);
+    expect(b).to.equal(4);
+
     i++;
   });
 
   foo.subscribe(function(a, b){
-    a.should.be.equal(3);
-    b.should.be.equal(4);
+    expect(a).to.equal(3);
+    expect(b).to.equal(4);
     i++;
   });
 
   foo.subscribe(function(a, b){
-    a.should.be.equal(3);
-    b.should.be.equal(4);
-    i.should.be.equal(2);
+    expect(a).to.equal(3);
+    expect(b).to.equal(4);
     done();
   });
 
@@ -30,7 +30,6 @@ it('publishes', function(done){
 });
 
 it('has subscription', function(done){
-
   function cb1(){}
   function cb2(){}
   function cb3(){}
@@ -41,13 +40,12 @@ it('has subscription', function(done){
   foo.subscribe(cb2);
   foo.subscribe(cb3);
 
-  foo.subscribers.length.should.be.equal(3);
-  foo.subscribers[0].callback.should.be.equal(cb1);
-  foo.subscribers[1].callback.should.be.equal(cb2);
-  foo.subscribers[2].callback.should.be.equal(cb3);
+  expect(foo.subscribers.length).to.equal(3);
+  expect(foo.subscribers[0].callback).to.equal(cb1);
+  expect(foo.subscribers[1].callback).to.equal(cb2);
+  expect(foo.subscribers[2].callback).to.equal(cb3);
 
   done();
-
 });
 
 it('has unsubscription', function(done){
@@ -63,10 +61,10 @@ it('has unsubscription', function(done){
 
   foo.unsubscribe(cb2);
 
-  foo.subscribers.length.should.be.equal(3);
-  foo.subscribers[0].callback.should.be.equal(cb1);
-  should.not.exist(foo.subscribers[1]);
-  foo.subscribers[2].callback.should.be.equal(cb3);
+  expect(foo.subscribers.length).to.equal(3);
+  expect(foo.subscribers[0].callback).to.equal(cb1);
+  expect(foo.subscribers[1]).to.not.exist;
+  expect(foo.subscribers[2].callback).to.equal(cb3);
 
   done();
 });
