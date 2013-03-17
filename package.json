@@ -1,6 +1,6 @@
 {
   "name": "ada-pubsub",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Minimalistic Pubsub Library",
   "main": "index.js",
   "scripts": {
