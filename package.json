@@ -4,7 +4,11 @@
   "description": "Minimalistic Pubsub Library",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "highkick"
+  },
+  "devDependencies":{
+    "chai": "*",
+    "highkick": "*"
   },
   "repository": {
     "type": "git",

@@ -41,9 +41,9 @@ it('has subscription', function(done){
   foo.subscribe(cb3);
 
   expect(foo.subscribers.length).to.equal(3);
-  expect(foo.subscribers[0].callback).to.equal(cb1);
-  expect(foo.subscribers[1].callback).to.equal(cb2);
-  expect(foo.subscribers[2].callback).to.equal(cb3);
+  expect(foo.subscribers[0]).to.equal(cb1);
+  expect(foo.subscribers[1]).to.equal(cb2);
+  expect(foo.subscribers[2]).to.equal(cb3);
 
   done();
 });
@@ -62,9 +62,39 @@ it('has unsubscription', function(done){
   foo.unsubscribe(cb2);
 
   expect(foo.subscribers.length).to.equal(3);
-  expect(foo.subscribers[0].callback).to.equal(cb1);
+
+  expect(foo.subscribers[0]).to.equal(cb1);
   expect(foo.subscribers[1]).to.not.exist;
-  expect(foo.subscribers[2].callback).to.equal(cb3);
+  expect(foo.subscribers[2]).to.equal(cb3);
 
   done();
+});
+
+it('lets subscribe for once', function(done){
+
+  var calledOnce = false;
+
+  function cb(){
+    expect(calledOnce).to.be.false;
+
+    calledOnce = true;
+    done();
+  }
+
+  var p = pubsub();
+
+  p.subscribe.once(cb);
+
+  setTimeout(function(){
+
+    p.publish();
+
+    setTimeout(function(){
+
+      p.publish();
+
+    }, 200);
+
+  }, 100);
+
 });
