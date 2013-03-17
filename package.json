@@ -1,12 +1,12 @@
 {
   "name": "ada-pubsub",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Minimalistic Pubsub Library",
   "main": "index.js",
   "scripts": {
     "test": "highkick"
   },
-  "devDependencies":{
+  "devDependencies": {
     "chai": "*",
     "highkick": "*"
   },
