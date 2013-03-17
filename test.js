@@ -78,6 +78,11 @@ it('lets subscribe for once', function(done){
     expect(calledOnce).to.be.false;
 
     calledOnce = true;
+
+    p.unsubscribe.once(cb);
+    expect(p.subscribersForOnce[0]).to.not.exist;
+
+
     done();
   }
 

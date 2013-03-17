@@ -13,6 +13,10 @@ function fog(customProxy){
     once(proxy, callback);
   }
 
+  function unsubOnce(callback){
+    unsubscribeOnce(proxy, callback);
+  }
+
   function unsub(callback){
     unsubscribe(proxy, callback);
   }
@@ -23,15 +27,16 @@ function fog(customProxy){
     publish.apply(undefined, args);
   }
 
-  proxy.subscribers      = [];
-  proxy.onceSubscribers  = [];
+  proxy.subscribers        = [];
+  proxy.subscribersForOnce = [];
 
-  proxy.subscribe        = sub;
-  proxy.subscribe.once   = subOnce;
-  proxy.unsubscribe      = unsub;
-  proxy.publish          = pub;
-  proxy.extendsAdaPubsub = true;
-  proxy.hasCustomProxy   = !!customProxy;
+  proxy.subscribe          = sub;
+  proxy.subscribe.once     = subOnce;
+  proxy.unsubscribe        = unsub;
+  proxy.unsubscribe.once   = unsubOnce;
+  proxy.publish            = pub;
+  proxy.extendsAdaPubsub   = true;
+  proxy.hasCustomProxy     = !!customProxy;
 
   return proxy;
 }
@@ -58,8 +63,8 @@ function publish(from){
     });
   }
 
-  if (from && from.onceSubscribers && from.onceSubscribers.length > 0) {
-    from.onceSubscribers.forEach(function(cb, i){
+  if (from && from.subscribersForOnce && from.subscribersForOnce.length > 0) {
+    from.subscribersForOnce.forEach(function(cb, i){
       if(!cb) return;
 
       try {
@@ -69,7 +74,7 @@ function publish(from){
       }
     });
 
-    from.onceSubscribers = [];
+    from.subscribersForOnce = [];
 
   }
 
@@ -96,7 +101,7 @@ function subscribe(to, callback){
 function once(to, callback){
   if(!callback) return false;
 
-  return to.onceSubscribers.push(callback);
+  return to.subscribersForOnce.push(callback);
 }
 
 /**
@@ -110,7 +115,29 @@ function unsubscribe(to, callback){
 
   while(i--){
     if(to.subscribers[i] && to.subscribers[i] == callback){
-      to.subscribers[i] = null;
+      to.subscribers[i] = undefined;
+
+      return i;
+    }
+  }
+
+  return false;
+}
+
+
+/**
+ * Unsubscribe callback subscribed for once to specified pubsub.
+ *
+ * @param {Pubsub} to
+ * @param {Function} callback
+ * @return {Boolean or Number}
+ */
+function unsubscribeOnce(to, callback){
+  var i = to.subscribersForOnce.length;
+
+  while(i--){
+    if(to.subscribersForOnce[i] && to.subscribersForOnce[i] == callback){
+      to.subscribersForOnce[i] = undefined;
 
       return i;
     }
