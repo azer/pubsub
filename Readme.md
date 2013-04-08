@@ -1,7 +1,7 @@
 Minimalist Pubsub Library.
 
 ```bash
-$ npm install ada-pubsub # component install adaio/pubsub
+$ npm install new-pubsub
 ```
 
 ## API
