@@ -1,4 +1,4 @@
-Minimalist Pubsub Library.
+Minimalistic Pubsub Library.
 
 ```bash
 $ npm install new-pubsub
