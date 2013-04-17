@@ -1,6 +1,6 @@
 {
-  "name": "ada-pubsub",
-  "version": "0.0.6",
+  "name": "new-pubsub",
+  "version": "0.0.0",
   "description": "Minimalistic Pubsub Library",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:adaio/pubsub.git"
+    "url": "git@github.com:azer/pubsub.git"
   },
   "keywords": [
     "pubsub",

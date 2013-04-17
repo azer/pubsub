@@ -1,7 +1,8 @@
-module.exports = fog;
+module.exports = PubSub;
 
-function fog(customProxy){
-  var proxy = customProxy || function pubsubProxy(){
+function PubSub(mix){
+
+  var proxy = mix || function pubsubProxy(){
     arguments.length && sub.apply(undefined, arguments);
   };
 
@@ -35,8 +36,8 @@ function fog(customProxy){
   proxy.unsubscribe        = unsub;
   proxy.unsubscribe.once   = unsubOnce;
   proxy.publish            = pub;
-  proxy.extendsAdaPubsub   = true;
-  proxy.hasCustomProxy     = !!customProxy;
+  proxy.extendsPubSub      = true;
+  proxy.isMix              = !!mix;
 
   return proxy;
 }
