@@ -1,6 +1,6 @@
 {
   "name": "new-pubsub",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Minimalistic Pubsub Library",
   "main": "index.js",
   "scripts": {
