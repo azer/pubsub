@@ -36,8 +36,6 @@ function PubSub(mix){
   proxy.unsubscribe        = unsub;
   proxy.unsubscribe.once   = unsubOnce;
   proxy.publish            = pub;
-  proxy.extendsPubSub      = true;
-  proxy.isMix              = !!mix;
 
   return proxy;
 }
