@@ -1,7 +1,7 @@
 Minimalistic Pubsub Library.
 
 ```bash
-$ npm install new-pubsub
+$ npm install pubsub
 ```
 
 ## Usage
@@ -40,10 +40,10 @@ foo.subscribers.length
 
 ```js
 foo.subscribe.once(function(update){
-    
+
     update
     // => 3.14
-    
+
 })
 
 foo.publish(3.14)
