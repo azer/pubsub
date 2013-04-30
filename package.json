@@ -1,5 +1,5 @@
 {
-  "name": "new-pubsub",
+  "name": "ak47",
   "version": "0.0.2",
   "description": "Minimalistic Pubsub Library",
   "main": "index.js",
@@ -11,12 +11,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:azer/pubsub.git"
+    "url": "git@github.com:azer/new-pubsub.git"
   },
-  "keywords": [
-    "pubsub",
-    "ada"
-  ],
   "author": "Azer Koculu <azer@kodfabrik.com>",
   "license": "BSD"
 }
