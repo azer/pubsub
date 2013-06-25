@@ -1,4 +1,4 @@
-Minimalistic Pubsub Library.
+Minimalistic Pubsub Library. ![Build Status](https://travis-ci.org/azer/pubsub.png)
 
 ```bash
 $ npm install pubsub
