@@ -5,7 +5,6 @@ $ npm install pubsub
 ```
 
 ![Build Status](https://travis-ci.org/azer/pubsub.png)
-
 ## Usage
 
 Creates and returns a new Pubsub object.
