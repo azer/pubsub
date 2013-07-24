@@ -20,6 +20,8 @@ onReady(function(a, b){ //  oronReady.subscribe
 onReady.publish(3, 4)
 ```
 
+## API
+
 ### `subscribe`
 
 ### `subscribe.once`
