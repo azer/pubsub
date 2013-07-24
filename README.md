@@ -1,10 +1,11 @@
+# pubsub
+
 Minimalistic Pubsub Library.
 
 ```bash
 $ npm install pubsub
 ```
 
-![Build Status](https://travis-ci.org/azer/pubsub.png)
 ## Usage
 
 Creates and returns a new Pubsub object.
@@ -53,5 +54,3 @@ foo.unsubscribe(callback)
 foo.subscribers.length
 // => 0
 ```
-
-![](http://distilleryimage9.s3.amazonaws.com/1c773a1e85a011e2bd8822000a9d0df8_6.jpg)
