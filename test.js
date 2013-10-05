@@ -71,35 +71,34 @@ it('has unsubscription', function(done){
 });
 
 it('lets subscribe for once', function(done){
-
   var calledOnce = false;
 
-  function cb(){
-    expect(calledOnce).to.be.false;
-
-    calledOnce = true;
-
-    p.unsubscribe.once(cb);
-    expect(p.subscribersForOnce[0]).to.not.exist;
-
-
-    done();
-  }
-
   var p = pubsub();
-
-  p.subscribe.once(cb);
+  p.subscribe.once(first);
+  p.subscribe.once(third);
+  p.unsubscribe.once(third);
 
   setTimeout(function(){
-
     p.publish();
 
     setTimeout(function(){
-
+      p.subscribe.once(second);
       p.publish();
-
     }, 200);
 
   }, 100);
+
+  function first (){
+    expect(first.called).to.not.exist;
+    first.called = true;
+  }
+
+  function second () {
+    done();
+  }
+
+  function third () {
+    done(new Error('Third callback shouldnt have been called'));
+  }
 
 });
