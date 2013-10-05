@@ -71,8 +71,6 @@ it('has unsubscription', function(done){
 });
 
 it('lets subscribe for once', function(done){
-  var calledOnce = false;
-
   var p = pubsub();
   p.subscribe.once(first);
   p.subscribe.once(third);
@@ -81,10 +79,9 @@ it('lets subscribe for once', function(done){
   setTimeout(function(){
     p.publish();
 
-    setTimeout(function(){
-      p.subscribe.once(second);
-      p.publish();
-    }, 200);
+    p.subscribe.once(second);
+    p.subscribe.once(forth);
+    p.publish();
 
   }, 100);
 
@@ -94,11 +91,16 @@ it('lets subscribe for once', function(done){
   }
 
   function second () {
-    done();
+    second.called = true;
   }
 
   function third () {
     done(new Error('Third callback shouldnt have been called'));
+  }
+
+  function forth () {
+    expect(second.called).to.be.true;
+    done();
   }
 
 });

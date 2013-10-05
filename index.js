@@ -62,8 +62,10 @@ function publish(from){
     });
   }
 
+  var callbacks;
   if (from && from.subscribersForOnce && from.subscribersForOnce.length > 0) {
-    from.subscribersForOnce.forEach(function(cb, i){
+    callbacks = from.subscribersForOnce.splice(0, from.subscribersForOnce.length);
+    callbacks.forEach(function(cb, i){
       if(!cb) return;
 
       try {
@@ -72,9 +74,7 @@ function publish(from){
         setTimeout(function(){ throw exc; }, 0);
       }
     });
-
-    from.subscribersForOnce = [];
-
+    delete callbacks;
   }
 
 }
