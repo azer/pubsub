@@ -1,5 +1,20 @@
 var pubsub = require('./');
 
+describe('pubsub()', function(){
+  it('returns an empty pubsub by default', function(){
+    var foo = pubsub();
+    expect(foo.subscribe).to.exist;
+    expect(foo.unsubscribe).to.exist;
+  });
+
+  it('mixes given object with pubsub API', function(){
+    var foo = pubsub({ value: 123, hello: 'world' });
+    expect(foo.subscribe).to.exist;
+    expect(foo.unsubscribe).to.exist;
+  });
+
+});
+
 describe('subscribe', function(){
 
   it('adds callback for updates', function(done){

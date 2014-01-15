@@ -1,6 +1,6 @@
-module.exports = n;
+module.exports = pubsub;
 
-function n (mix) {
+function pubsub (mix) {
   var subscribers;
   var subscribersForOnce;
 
