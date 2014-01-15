@@ -1,146 +1,112 @@
-module.exports = PubSub;
+module.exports = n;
 
-function PubSub(mix){
+function n (mix) {
+  var subscribers;
+  var subscribersForOnce;
 
-  var proxy = mix || function pubsubProxy(){
-    arguments.length && sub.apply(undefined, arguments);
+  mix || (mix = function (fn) {
+    if (fn) mix.subscribe(fn);
+  });
+
+  mix.subscribe = function (fn) {
+    if (!subscribers) return subscribers = fn;
+    if (typeof subscribers == 'function') subscribers = [subscribers];
+    subscribers.push(fn);
   };
 
-  function sub(callback){
-    subscribe(proxy, callback);
-  }
+  mix.subscribe.once = function (fn) {
+    if (!subscribersForOnce) return subscribersForOnce = fn;
+    if (typeof subscribersForOnce == 'function') subscribersForOnce = [subscribersForOnce];
+    subscribersForOnce.push(fn);
+  };
 
-  function subOnce(callback){
-    once(proxy, callback);
-  }
+  mix.unsubscribe = function (fn) {
+    if (!subscribers) return;
 
-  function unsubOnce(callback){
-    unsubscribeOnce(proxy, callback);
-  }
-
-  function unsub(callback){
-    unsubscribe(proxy, callback);
-  }
-
-  function pub(){
-    var args = [proxy];
-    Array.prototype.push.apply(args, arguments);
-    publish.apply(undefined, args);
-  }
-
-  proxy.subscribers        = [];
-  proxy.subscribersForOnce = [];
-
-  proxy.subscribe          = sub;
-  proxy.subscribe.once     = subOnce;
-  proxy.unsubscribe        = unsub;
-  proxy.unsubscribe.once   = unsubOnce;
-  proxy.publish            = pub;
-
-  return proxy;
-}
-
-/**
- * Publish "from" by applying given args
- *
- * @param {Function} from
- * @param {...Any} args
- */
-function publish(from){
-
-  var args = Array.prototype.slice.call(arguments, 1);
-
-  if (from && from.subscribers && from.subscribers.length > 0) {
-    from.subscribers.forEach(function(cb, i){
-      if(!cb) return;
-
-      try {
-        cb.apply(undefined, args);
-      } catch(exc) {
-        setTimeout(function(){ throw exc; }, 0);
-      }
-    });
-  }
-
-  var callbacks;
-  if (from && from.subscribersForOnce && from.subscribersForOnce.length > 0) {
-    callbacks = from.subscribersForOnce.splice(0, from.subscribersForOnce.length);
-    callbacks.forEach(function(cb, i){
-      if(!cb) return;
-
-      try {
-        cb.apply(undefined, args);
-      } catch(exc) {
-        setTimeout(function(){ throw exc; }, 0);
-      }
-    });
-    delete callbacks;
-  }
-
-}
-
-/**
- * Subscribe callback to given pubsub object.
- *
- * @param {Pubsub} to
- * @param {Function} callback
- */
-function subscribe(to, callback){
-  if(!callback) return false;
-  return to.subscribers.push(callback);
-}
-
-
-/**
- * Subscribe callback to given pubsub object for only one publish.
- *
- * @param {Pubsub} to
- * @param {Function} callback
- */
-function once(to, callback){
-  if(!callback) return false;
-
-  return to.subscribersForOnce.push(callback);
-}
-
-/**
- * Unsubscribe callback to given pubsub object.
- *
- * @param {Pubsub} to
- * @param {Function} callback
- */
-function unsubscribe(to, callback){
-  var i = to.subscribers.length;
-
-  while(i--){
-    if(to.subscribers[i] && to.subscribers[i] == callback){
-      to.subscribers[i] = undefined;
-
-      return i;
+    if (typeof subscribers == 'function') {
+      if (subscribers != fn) return;
+      subscribers = undefined;
+      return;
     }
-  }
 
-  return false;
-}
+    var i = subscribers.length;
 
-
-/**
- * Unsubscribe callback subscribed for once to specified pubsub.
- *
- * @param {Pubsub} to
- * @param {Function} callback
- * @return {Boolean or Number}
- */
-function unsubscribeOnce(to, callback){
-  var i = to.subscribersForOnce.length;
-
-  while(i--){
-    if(to.subscribersForOnce[i] && to.subscribersForOnce[i] == callback){
-      to.subscribersForOnce[i] = undefined;
-
-      return i;
+    while (i--) {
+      if (subscribers[i] && subscribers[i] == fn){
+        subscribers[i] = undefined;
+        return;
+      }
     }
-  }
+  };
 
-  return false;
+  mix.unsubscribe.once = function (fn) {
+    if (!subscribersForOnce) return;
+
+    if (typeof subscribersForOnce == 'function') {
+      if (subscribersForOnce != fn) return;
+      subscribersForOnce = undefined;
+      return;
+    }
+
+    var i = subscribersForOnce.length;
+
+    while (i--) {
+      if (subscribersForOnce[i] && subscribersForOnce[i] == fn){
+        subscribersForOnce[i] = undefined;
+        return;
+      }
+    }
+  };
+
+  mix.publish = function () {
+    var params = arguments;
+    var i, len;
+
+    if (subscribers && typeof subscribers != 'function' && subscribers.length) {
+      i = -1;
+      len = subscribers.length;
+
+      while (++i < len) {
+        if (!subscribers[i] || typeof subscribers[i] != 'function') continue;
+
+        try {
+          subscribers[i].apply(undefined, params);
+        } catch(err) {
+          setTimeout(function () { throw err; }, 0);
+        }
+      };
+    } else if (typeof subscribers == 'function') {
+      try {
+        subscribers.apply(undefined, params);
+      } catch(err) {
+        setTimeout(function () { throw err; }, 0);
+      }
+    }
+
+    if (subscribersForOnce && typeof subscribersForOnce != 'function' && subscribersForOnce.length) {
+      i = -1;
+      len = subscribersForOnce.length;
+
+      while (++i < len) {
+        if (!subscribersForOnce[i] || typeof subscribersForOnce[i] != 'function') continue;
+
+        try {
+          subscribersForOnce[i].apply(undefined, params);
+        } catch(err) {
+          setTimeout(function () { throw err; }, 0);
+        }
+      };
+
+      subscribersForOnce = undefined;
+    } else if (typeof subscribersForOnce == 'function') {
+      try {
+        subscribersForOnce.apply(undefined, params);
+      } catch(err) {
+        setTimeout(function () { throw err; }, 0);
+      }
+      subscribersForOnce = undefined;
+    }
+  };
+
+  return mix;
 }
