@@ -1,4 +1,4 @@
-# pubsub
+# pubsub [![Build Status](https://travis-ci.org/azer/pubsub.png)](https://travis-ci.org/azer/pubsub)
 
 Minimalistic Pubsub Library.
 
