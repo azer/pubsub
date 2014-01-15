@@ -4,10 +4,10 @@
   "description": "Minimalistic Pubsub Library",
   "main": "index.js",
   "scripts": {
-    "test": "fox"
+    "test": "prova"
   },
   "devDependencies": {
-    "fox": "*"
+    "prova": "*"
   },
   "repository": {
     "type": "git",
