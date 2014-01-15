@@ -1,6 +1,8 @@
 # pubsub [![Build Status](https://travis-ci.org/azer/pubsub.png)](https://travis-ci.org/azer/pubsub)
 
-Minimalistic Pubsub Library.
+Library for creating individual events with a minimalistic API.
+
+## Install
 
 ```bash
 $ npm install pubsub
@@ -8,23 +10,56 @@ $ npm install pubsub
 
 ## Usage
 
-Creates and returns a new Pubsub object.
-
 ```js
 onReady = pubsub()
 
-onReady(function(a, b){ //  oronReady.subscribe
-    console.log('A: %s, B: %s', a, b)
+onReady(function(a, b, c){ // shortcut to: onReady.subscribe
+    console.log(a, b, c)
+    // => 3, 4, 1
 })
 
-onReady.publish(3, 4)
+onReady.publish(3, 4, 1)
+```
+
+You can optionally, you can pass `pubsub()` an object to mix the interfaces:
+
+```js
+foo = pubsub({ value: 12345 })
+
+foo.subscribe(function () {
+
+  foo.value
+  // => 3.14
+  // => 158
+})
+
+foo.value = 314
+foo.publish()
+
+foo.value = 158
+foo.publish()
 ```
 
 ## API
 
-### `subscribe`
+### subscribe(`fn`)
 
-### `subscribe.once`
+```js
+foo.subscribe(function(update){
+
+    update
+    // => 3.14
+    // => 156
+    // => { last: true }
+
+})
+
+foo.publish(3.14)
+foo.publish(156)
+foo.publish({ last: true })
+```
+
+### subscribe.once(`fn`)
 
 ```js
 foo.subscribe.once(function(update){
@@ -39,20 +74,6 @@ foo.publish(156)
 
 ```
 
-### `unsubscribe`
+### unsubscribe(`fn`)
 
-```js
-foo = pubsub({ bar: 1 })
-
-function callback(a, b){
-    console.log('A: %s, B: %s', a, b)
-}
-
-foo.subscribe(callback)
-foo.subscribers.length
-// => 1
-
-foo.unsubscribe(callback)
-foo.subscribers.length
-// => 0
-```
+### unsubscribe.once(`fn`)
