@@ -33,7 +33,7 @@ foo.subscribe(function () {
   // => 158
 })
 
-foo.value = 314
+foo.value = 3.14
 foo.publish()
 
 foo.value = 158
